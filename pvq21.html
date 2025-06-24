@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PVQ21 價值觀問卷（官方原版）</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft JhengHei', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .instructions {
+            background: #f8fafc;
+            padding: 25px;
+            border-left: 4px solid #4f46e5;
+            margin: 20px;
+            border-radius: 8px;
+        }
+
+        .instructions h3 {
+            color: #1e293b;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+
+        .scale-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 8px;
+            margin-top: 15px;
+        }
+
+        .scale-item {
+            background: white;
+            padding: 8px 10px;
+            border-radius: 6px;
+            text-align: center;
+            font-size: 0.85rem;
+            border: 1px solid #e2e8f0;
+        }
+
+        .form-content {
+            padding: 30px;
+        }
+
+        .question {
+            background: #fefefe;
+            border: 2px solid #f1f5f9;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .question:hover {
+            border-color: #4f46e5;
+            box-shadow: 0 8px 25px rgba(79, 70, 229, 0.1);
+        }
+
+        .question-number {
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+        }
+
+        .question-text {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: #334155;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+
+        .rating-scale {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+
+        .rating-option {
+            position: relative;
+            flex: 1;
+            max-width: 80px;
+        }
+
+        .rating-option input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .rating-option label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 45px;
+            border-radius: 8px;
+            border: 2px solid #e2e8f0;
+            background: white;
+            font-weight: bold;
+            color: #64748b;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            user-select: none;
+            font-size: 0.9rem;
+        }
+
+        .rating-option input[type="radio"]:checked + label {
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            border-color: #4f46e5;
+            color: white;
+            transform: scale(1.05);
+            box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3);
+        }
+
+        .rating-option label:hover {
+            border-color: #4f46e5;
+            transform: scale(1.02);
+        }
+
+        .scale-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+            font-size: 0.85rem;
+            color: #64748b;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: block;
+            margin: 30px auto;
+            min-width: 200px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.3);
+        }
+
+        .submit-btn:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .results {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 30px;
+            margin-top: 30px;
+            border: 2px solid #4f46e5;
+        }
+
+        .results h2 {
+            color: #1e293b;
+            margin-bottom: 25px;
+            text-align: center;
+            font-size: 1.8rem;
+        }
+
+        .value-result {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: white;
+            padding: 15px 20px;
+            margin-bottom: 12px;
+            border-radius: 8px;
+            border-left: 4px solid #4f46e5;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .value-name {
+            font-weight: 600;
+            color: #1e293b;
+            font-size: 1.1rem;
+        }
+
+        .value-score {
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            min-width: 80px;
+            text-align: center;
+        }
+
+        .rank {
+            background: #fbbf24;
+            color: white;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9rem;
+            margin-right: 15px;
+        }
+
+        .progress {
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .progress-bar {
+            background: #e2e8f0;
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+
+        .progress-fill {
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            height: 100%;
+            transition: width 0.3s ease;
+            border-radius: 4px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .form-content, .header {
+                padding: 20px;
+            }
+            
+            .rating-scale {
+                display: grid;
+                grid-template-columns: repeat(6, 1fr);
+                gap: 8px;
+            }
+            
+            .rating-option {
+                max-width: none;
+            }
+            
+            .rating-option label {
+                height: 40px;
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>PVQ21 價值觀問卷</h1>
+            <p>基於施瓦茨基本人類價值觀理論（官方原版）</p>
+        </div>
+
+        <div class="instructions">
+            <h3>📋 填答說明</h3>
+            <p>以下描述了21位不同的人。請仔細閱讀每個描述，然後評估這個人與您的相似程度。請使用1-6的評分標準：</p>
+            
+            <div class="scale-info">
+                <div class="scale-item">1: 完全不像我</div>
+                <div class="scale-item">2: 不像我</div>
+                <div class="scale-item">3: 有點不像我</div>
+                <div class="scale-item">4: 有點像我</div>
+                <div class="scale-item">5: 像我</div>
+                <div class="scale-item">6: 非常像我</div>
+            </div>
+        </div>
+
+        <form id="pvq21Form" class="form-content">
+            <div class="progress">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <span id="progressText">進度: 0/21</span>
+            </div>
+
+            <div id="questions"></div>
+
+            <button type="submit" class="submit-btn" id="submitBtn" disabled>
+                🚀 計算我的價值觀排序
+            </button>
+        </form>
+
+        <div id="results" class="results" style="display: none;">
+            <h2>🏆 您的價值觀排序結果</h2>
+            <div id="valueResults"></div>
+        </div>
+    </div>
+
+    <script>
+        // 完全按照您提供的21道題目原文（轉為繁體字）
+        const questions = [
+            "想出新點子，發揮創意對他來說很重要。他喜歡以與眾不同的方式做事。",
+            "富裕對他來說很重要，他希望自己有很多很多的錢並擁有許多昂貴的東西。",
+            "他認為普天下人人平等很重要。他相信生活中每個人都應當享有平等的機會。",
+            "對他來說，發揮自己的才能很重要。他希望以此得到人們的欣賞。",
+            "安全的生活環境對他來說很重要。他避免任何會危及自身安全的事情。",
+            "他喜歡驚喜，總是尋求新鮮事物。他認為豐富多彩的人生經歷很重要。",
+            "他認為人們應該懂得服從命令。在他看來，任何情況下大家都要遵守規則，即使身邊沒人注意。",
+            "聆聽不同的意見對他來說很重要。即使他和別人意見不合，他仍然希望能夠理解別人。",
+            "恭敬和謙虛對他來說很重要。他盡量避免引起別人的注意。",
+            "享受生活的樂趣對他來說很重要。他喜歡讓自己盡情享樂。",
+            "自己的事自己做主對他來說很重要。他喜歡自由地籌劃和安排，不依靠他人。",
+            "幫助身邊的人對他來說很重要。他希望關心他們，使他們生活幸福。",
+            "成功對他來說很重要。他希望別人認可他的成就。",
+            "國家能給他完全安全保障對他來說非常重要。他希望一個能保護人民的強壯國家。",
+            "他總是尋找參與冒險的機會。希望刺激有趣的生活。",
+            "舉止得體對他來說很重要。他不希望做出任何會引起別人非議的事情。",
+            "別人對他的尊重對他來說很重要。他希望別人按他的主意辦事。",
+            "保持對朋友忠心耿耿對他來說很重要。他希望為親友付出一切。",
+            "他堅信人們應該關愛大自然。愛護生態環境對他來說很重要。",
+            "傳統對他很重要。他嘗試按照宗教或家庭傳統風俗習慣為人處世。",
+            "他把握每一個開心的機會。做能給自己帶來樂趣的事對他來說很重要。"
+        ];
+
+        // 根據標準PVQ21的價值觀對應關係
+        const valueMapping = {
+            1: 'self-direction',    // 自主性
+            2: 'power',             // 權力
+            3: 'universalism',      // 普世主義
+            4: 'achievement',       // 成就
+            5: 'security',          // 安全
+            6: 'stimulation',       // 刺激
+            7: 'conformity',        // 順從
+            8: 'universalism',      // 普世主義
+            9: 'tradition',         // 傳統
+            10: 'hedonism',         // 享樂主義
+            11: 'self-direction',   // 自主性
+            12: 'benevolence',      // 仁愛
+            13: 'achievement',      // 成就
+            14: 'security',         // 安全
+            15: 'stimulation',      // 刺激
+            16: 'conformity',       // 順從
+            17: 'power',            // 權力
+            18: 'benevolence',      // 仁愛
+            19: 'universalism',     // 普世主義
+            20: 'tradition',        // 傳統
+            21: 'hedonism'          // 享樂主義
+        };
+
+        // 價值觀中文名稱
+        const valueNames = {
+            'self-direction': '自主性',
+            'stimulation': '刺激', 
+            'hedonism': '享樂主義',
+            'achievement': '成就',
+            'power': '權力',
+            'security': '安全',
+            'conformity': '順從',
+            'tradition': '傳統',
+            'benevolence': '仁愛',
+            'universalism': '普世主義'
+        };
+
+        // 生成問題HTML
+        function generateQuestions() {
+            const questionsContainer = document.getElementById('questions');
+            questions.forEach((question, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'question';
+                questionDiv.innerHTML = `
+                    <div class="question-number">${index + 1}</div>
+                    <div class="question-text">${question}</div>
+                    <div class="rating-scale">
+                        ${[1,2,3,4,5,6].map(value => `
+                            <div class="rating-option">
+                                <input type="radio" id="q${index + 1}_${value}" name="q${index + 1}" value="${value}" required>
+                                <label for="q${index + 1}_${value}">${value}</label>
+                            </div>
+                        `).join('')}
+                    </div>
+                    <div class="scale-labels">
+                        <span>完全不像我</span>
+                        <span>非常像我</span>
+                    </div>
+                `;
+                questionsContainer.appendChild(questionDiv);
+            });
+        }
+
+        // 更新進度
+        function updateProgress() {
+            const totalQuestions = 21;
+            const answeredQuestions = document.querySelectorAll('input[type="radio"]:checked').length;
+            const progress = (answeredQuestions / totalQuestions) * 100;
+            
+            document.getElementById('progressFill').style.width = progress + '%';
+            document.getElementById('progressText').textContent = `進度: ${answeredQuestions}/${totalQuestions}`;
+            
+            const submitBtn = document.getElementById('submitBtn');
+            if (answeredQuestions === totalQuestions) {
+                submitBtn.disabled = false;
+                submitBtn.textContent = '🚀 計算我的價值觀排序';
+                submitBtn.style.background = 'linear-gradient(135deg, #10b981, #059669)';
+            } else {
+                submitBtn.disabled = true;
+                submitBtn.textContent = `還需填答 ${totalQuestions - answeredQuestions} 題`;
+                submitBtn.style.background = '#9ca3af';
+            }
+        }
+
+        // 計算結果（按照施瓦茨標準PVQ21計算方法）
+        function calculateResults(formData) {
+            const valueScores = {};
+            const valueCounts = {};
+            
+            // 初始化
+            Object.values(valueNames).forEach(name => {
+                valueScores[name] = 0;
+                valueCounts[name] = 0;
+            });
+
+            // 計算每個價值觀的總分和題目數
+            for (let i = 1; i <= 21; i++) {
+                const score = parseInt(formData.get(`q${i}`));
+                const valueType = valueMapping[i];
+                const valueName = valueNames[valueType];
+                
+                valueScores[valueName] += score;
+                valueCounts[valueName]++;
+            }
+
+            // 計算平均分
+            const averageScores = {};
+            Object.keys(valueScores).forEach(name => {
+                averageScores[name] = (valueScores[name] / valueCounts[name]).toFixed(3);
+            });
+
+            // 計算總平均分（所有21題的總平均）
+            const allScores = [];
+            for (let i = 1; i <= 21; i++) {
+                allScores.push(parseInt(formData.get(`q${i}`)));
+            }
+            const totalAverage = allScores.reduce((sum, score) => sum + score, 0) / 21;
+
+            // 計算中心化分數（這是標準做法）
+            const centeredScores = {};
+            Object.keys(averageScores).forEach(name => {
+                centeredScores[name] = (parseFloat(averageScores[name]) - totalAverage).toFixed(3);
+            });
+
+            // 排序（從高到低）
+            const sortedValues = Object.keys(centeredScores).sort((a, b) => parseFloat(centeredScores[b]) - parseFloat(centeredScores[a]));
+
+            return { averageScores, centeredScores, sortedValues, totalAverage };
+        }
+
+        // 顯示結果
+        function displayResults(results) {
+            const resultsDiv = document.getElementById('results');
+            const valueResultsDiv = document.getElementById('valueResults');
+            
+            valueResultsDiv.innerHTML = `
+                <div style="background: #e0f2fe; padding: 15px; border-radius: 8px; margin-bottom: 20px; font-size: 0.9rem; color: #0f172a;">
+                    <strong>說明：</strong>分數為中心化調整後的結果（原始平均分減去個人總平均分 ${results.totalAverage.toFixed(3)}）<br>
+                    <strong>解讀：</strong>正值表示該價值觀對您相對重要，負值表示相對不重要
+                </div>
+            `;
+            
+            results.sortedValues.forEach((valueName, index) => {
+                const score = parseFloat(results.centeredScores[valueName]);
+                const scoreColor = score >= 0 ? '#10b981' : '#ef4444';
+                
+                const resultDiv = document.createElement('div');
+                resultDiv.className = 'value-result';
+                resultDiv.innerHTML = `
+                    <div style="display: flex; align-items: center;">
+                        <div class="rank">${index + 1}</div>
+                        <div class="value-name">${valueName}</div>
+                    </div>
+                    <div class="value-score" style="background: ${scoreColor};">
+                        ${score >= 0 ? '+' : ''}${results.centeredScores[valueName]}
+                    </div>
+                `;
+                valueResultsDiv.appendChild(resultDiv);
+            });
+
+            resultsDiv.style.display = 'block';
+            resultsDiv.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // 初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            generateQuestions();
+            
+            // 監聽選項變化
+            document.addEventListener('change', function(e) {
+                if (e.target.type === 'radio') {
+                    updateProgress();
+                }
+            });
+
+            // 表單提交
+            document.getElementById('pvq21Form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const formData = new FormData(this);
+                const results = calculateResults(formData);
+                displayResults(results);
+            });
+        });
+    </script>
+</body>
+</html>
