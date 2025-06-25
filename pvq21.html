@@ -389,13 +389,13 @@
             9: 'tradition',         // 傳統
             10: 'hedonism',         // 享樂主義
             11: 'self-direction',   // 自主性
-            12: 'benevolence',      // 仁愛
+            12: 'benevolence',      // 仁慈
             13: 'achievement',      // 成就
             14: 'security',         // 安全
             15: 'stimulation',      // 刺激
             16: 'conformity',       // 順從
             17: 'power',            // 權力
-            18: 'benevolence',      // 仁愛
+            18: 'benevolence',      // 仁慈
             19: 'universalism',     // 普世主義
             20: 'tradition',        // 傳統
             21: 'hedonism'          // 享樂主義
@@ -411,8 +411,22 @@
             'security': '安全',
             'conformity': '順從',
             'tradition': '傳統',
-            'benevolence': '仁愛',
+            'benevolence': '仁慈',
             'universalism': '普世主義'
+        };
+
+        // 價值觀詳細描述
+        const valueDescriptions = {
+            '自主性': '創造力、自由、選擇自己的目標、好奇、獨立',
+            '刺激': '冒險、變化的和刺激的生活',
+            '享樂主義': '快樂、享受生活',
+            '成就': '成功的、有能力的、有抱負的、有影響力的',
+            '權力': '權威、財富、社會權力',
+            '安全': '社會秩序、家庭安全、國家安全、互惠互利',
+            '順從': '順從、自律、禮貌、尊敬父母和長輩',
+            '傳統': '接受生活的命運安排、奉獻、尊重傳統、謙卑、節制',
+            '仁慈': '幫助、原諒、忠誠、誠實、真誠的友誼',
+            '普世主義': '社會公正、心胸開闊、世界和平、智慧、美好的世界、與自然和諧一體、保護環境、公平'
         };
 
         // 生成問題HTML
@@ -529,7 +543,12 @@
                 resultDiv.innerHTML = `
                     <div style="display: flex; align-items: center;">
                         <div class="rank">${index + 1}</div>
-                        <div class="value-name">${valueName}</div>
+                        <div style="flex: 1;">
+                            <div class="value-name">${valueName}</div>
+                            <div style="font-size: 0.85rem; color: #64748b; margin-top: 4px; line-height: 1.4;">
+                                ${valueDescriptions[valueName]}
+                            </div>
+                        </div>
                     </div>
                     <div class="value-score" style="background: ${scoreColor};">
                         ${score >= 0 ? '+' : ''}${results.centeredScores[valueName]}
